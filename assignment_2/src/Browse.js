@@ -16,7 +16,8 @@ export function Browse({
     const checkoutButton = document.getElementById("checkout-button");
     if (cartEmpty) {
       checkoutButton.classList.add("collapse");
-    } else {
+    } 
+    else {
       checkoutButton.classList.remove("collapse");
     }
   }, [cart]);
@@ -127,7 +128,7 @@ export function Browse({
                 .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
                 .reduce(
                   (total, price, index) =>
-                    total + 0.06 * price * cart[Object.keys(cart)[index]],
+                    total + 0.07 * price * cart[Object.keys(cart)[index]],
                   0
                 )
                 .toFixed(2)}
@@ -141,7 +142,7 @@ export function Browse({
                   (total, price, index) =>
                     total +
                     price * cart[Object.keys(cart)[index]] +
-                    0.06 * price * cart[Object.keys(cart)[index]],
+                    0.07 * price * cart[Object.keys(cart)[index]],
                   0
                 )
                 .toFixed(2)}
@@ -156,7 +157,7 @@ export function Browse({
           }}
           className="bg-green-500 hover:bg-green-700 py-4 px-4 border-green-700 rounded"
         >
-          🛒
+          Checkout
         </button>
       </div>
     </div>

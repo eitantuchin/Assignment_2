@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Browse } from "./Browse";
-import { Cart } from "./Cart";
+import React, {useState, useEffect} from "react";
+import {Browse} from "./Browse";
+import {Cart} from "./Cart";
 
 export function App() {
-  const [page, changePage] = useState("Browse");
-  const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
-  const [productPrices, setProductPrices] = useState([]);
+    const [productPrices, setProductPrices] = useState([]);
+    const [page, changePage] = useState("Browse");
+    const [products, setProducts] = useState([]);
+    const [cart, setCart] = useState([]);
+ 
 
   useEffect(() => {
     fetch("./products.json")
@@ -23,22 +24,24 @@ export function App() {
       });
   }, []);
 
-  function removeFromCart(productName) {
+  function resetCart(productName) {
     setCart((prevState) => ({
       ...prevState,
-      [productName]: Math.max(0, cart[productName] - 1),
+      [productName]: 0,
     }));
   }
+  
   function addToCart(productName) {
     setCart((prevState) => ({
       ...prevState,
       [productName]: cart[productName] + 1,
     }));
   }
-  function resetCart(productName) {
+
+  function removeFromCart(productName) {
     setCart((prevState) => ({
       ...prevState,
-      [productName]: 0,
+      [productName]: Math.max(0, cart[productName] - 1),
     }));
   }
 
