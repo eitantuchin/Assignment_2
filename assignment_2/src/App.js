@@ -1,14 +1,15 @@
 import React, {useState, useEffect} from "react";
 import {Browse} from "./Browse";
 import {Cart} from "./Cart";
+import {Confirmation} from "./Confirmation";
 
 export function App() {
-    const [productPrices, setProductPrices] = useState([]);
-    const [page, changePage] = useState("Browse");
-    const [products, setProducts] = useState([]);
-    const [cart, setCart] = useState([]);
- 
-
+  const [productPrices, setProductPrices] = useState([]);
+  const [page, changePage] = useState("Browse");
+  const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [order, setOrder] = useState([]);
+  
   useEffect(() => {
     fetch("./products.json")
       .then((response) => response.json())
@@ -46,7 +47,7 @@ export function App() {
   }
 
   return (
-    <div className="h-screen" style={{ backgroundColor: "darkslategrey" }}>
+    <div>
       <Browse
         isActive={page === "Browse"}
         changePage={changePage}
@@ -59,10 +60,17 @@ export function App() {
       <Cart
         isActive={page === "Cart"}
         changePage={changePage}
-        addToCart={addToCart}
+        cart={cart}
+        productPrices={productPrices}
+        order={order}
+      />
+      <Confirmation
+        isActive={page === "Confirmation"}
+        changePage={changePage}
         resetCart={resetCart}
         cart={cart}
         productPrices={productPrices}
+        order={order}
       />
     </div>
   );

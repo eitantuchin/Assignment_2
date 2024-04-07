@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export function Browse({
-  isActive,
-  changePage,
-  cart,
-  removeFromCart,
-  addToCart,
-  productPrices,
-  products,
-}) {
+export function Browse({isActive, changePage, cart, removeFromCart, addToCart, productPrices, products}) {
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
@@ -34,6 +26,7 @@ export function Browse({
       setFiltered(filtered);
     }
   }
+
   function doneShopping() {
     setFiltered(products);
     changePage("Cart");
@@ -105,14 +98,14 @@ export function Browse({
               {Object.keys(cart).map((key) =>
                 cart[key] > 0 ? (
                   <div key={key}>
-                    {key}: {cart[key]} x ${productPrices[key].toFixed(2)}
+                    <b>{key}:</b> {cart[key]} x ${productPrices[key].toFixed(2)}
                   </div>
                 ) : null
               )}
             </div>
             <br></br>
             <div>
-              Total without Tax: $
+              <b>Total without Tax:</b> $
               {Object.keys(cart)
                 .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
                 .reduce(
@@ -124,7 +117,7 @@ export function Browse({
             </div>
             <br></br>
             <div>
-              Tax: $
+              <b>Tax:</b> $
               {Object.keys(cart)
                 .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
                 .reduce(
@@ -136,7 +129,7 @@ export function Browse({
             </div>
             <br></br>
             <div>
-              Total: $
+              <b>Total:</b> $
               {Object.keys(cart)
                 .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
                 .reduce(
@@ -156,7 +149,7 @@ export function Browse({
           onClick={() => {
             doneShopping();
           }}
-          className="bg-green-500 hover:bg-green-700 py-4 px-4 border-green-700 rounded"
+          className="bg-green-500 hover:bg-green-700 py-4 px-4 mt-2 border-green-700 rounded w-full"
         >
           Checkout
         </button>

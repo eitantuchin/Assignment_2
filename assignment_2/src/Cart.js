@@ -5,6 +5,7 @@ var order = {
     email: "",
     address: "",
     card: "",
+    city: "",
 };
 
 function validate(order) {
@@ -15,11 +16,9 @@ function validate(order) {
     let zip = document.getElementById("inputZip");
     let state = document.getElementById("inputState");
     let address = document.getElementById("inputAddress");
+    let city = document.getElementById("inputCity");
     const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
-    const form = document.getElementById("checkout-form");
-    const backButton = document.getElementById("back-button");
-    const summaryCard = document.querySelector(".card");
-    const summaryList = document.querySelector(".card > ul");
+
 
     function validateElement(condition, element, ) {
         if (condition) {
@@ -44,6 +43,10 @@ function validate(order) {
         order.address = address.value;
     }
 
+    if (validateElement(city.value.length === 0, city)) {
+        order.city = city.value;
+    }
+
     if (validateElement(name.value.length === 0, name)) {
         order.name = name.value;
     }
@@ -63,32 +66,10 @@ function validate(order) {
         alertPlaceholder.append(wrapper);
     };
 
-    if (val) {
-        form.classList.add("collapse");
-        backButton.classList.add("collapse");
-
-        for (var [key, value] of Object.entries(order)) {
-            if (key === "card") {
-                value = "****-****-****" + value.slice(-5);
-            }
-            summaryList.innerHTML +=
-                '<li className="list-group-item"> <b>' +
-                `${key}` +
-                ": </b>" +
-                `${value}` +
-                "</li>";
-        }
-        summaryCard.classList.remove("collapse");
-        alertPlaceholder.innerHTML = "";
-        alert(
-            '<i className="bi-cart-check-fill"></i> You have made an order!',
-            "success"
-        );
-    }
     return val;
 }
 
-export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
+export function Cart({ isActive, changePage, cart, productPrices, resetCart, order}) {
 
     function isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
@@ -114,9 +95,7 @@ export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
             inputCard.value = newVal;
         }
     }
-    function backShopping() {
-        changePage("Browse");
-    }
+
     return !isActive ? (
         <></>
     ) : (
@@ -139,11 +118,11 @@ export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
 
             <div className="container">
                 <div className="row ">
-                    <div className="col-3">
+                    <div className="col-3 mt-4">
                         <button
-                            onClick={() => backShopping()}
+                            onClick={() => changePage("Browse")}
                             id="back-button"
-                            className="my-4 bg-green-200 hover:bg-green-300 py-2 px-2 border-green-700 rounded"
+                            className="mb-4 bg-green-200 hover:bg-green-300 py-2 px-2 border-green-700 rounded w-full"
                         >
                             Back to Shopping
                         </button>
@@ -153,14 +132,14 @@ export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
                                 {Object.keys(cart).map((key) =>
                                     cart[key] > 0 ? (
                                         <div key={key}>
-                                            {key}: {cart[key]} x ${productPrices[key].toFixed(2)}
+                                            <b>{key}:</b> {cart[key]} x ${productPrices[key].toFixed(2)}
                                         </div>
                                     ) : null
                                 )}
                             </div>
                             <br></br>
                             <div>
-                                Total without Tax: $
+                                <b>Total without Tax:</b> $
                                 {Object.keys(cart)
                                     .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
                                     .reduce(
@@ -172,7 +151,7 @@ export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
                             </div>
                             <br></br>
                             <div>
-                                Tax: $
+                                <b>Tax:</b> $
                                 {Object.keys(cart)
                                     .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
                                     .reduce(
@@ -184,7 +163,7 @@ export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
                             </div>
                             <br></br>
                             <div>
-                                Total with tax: $
+                                <b>Total with tax:</b> $
                                 {Object.keys(cart)
                                     .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
                                     .reduce(
@@ -199,7 +178,7 @@ export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
                         </div>
                     </div>
 
-                    <div className="col-8">
+                    <div className="col-8 mt-4">
                         <div className="text-white" id="liveAlertPlaceholder"></div>
 
                         <form className="row g-3 text-white" id="checkout-form">
@@ -288,6 +267,10 @@ export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
                                     className="form-control"
                                     id="inputCity"
                                 ></input>
+                                <div className="valid-feedback">Looks good!</div>
+                                <div className="invalid-feedback">
+                                    Must be like, "Ames"
+                                </div>
                             </div>
                             <div className="col-md-4">
                                 <label htmlFor="inputState" className="form-label">
@@ -367,9 +350,11 @@ export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
                                                 "liveAlertPlaceholder"
                                             );
                                             alertPlaceholder.innerHTML = "";
-                                            alert("Something went wrong!");
+                                            alert("Please enter the missing details.");
                                             event.preventDefault();
                                             event.stopPropagation();
+                                        } else {
+                                            changePage("Confirmation");
                                         }
                                         event.preventDefault();
                                         event.stopPropagation();
@@ -380,31 +365,6 @@ export function Cart({ isActive, changePage, cart, productPrices, resetCart }) {
                                 </button>
                             </div>
                         </form>
-                        <div className="card collapse" style={{ width: "25rem" }}>
-                            <div className="card-body">
-                                <h5 className="card-title">Order Confirmation</h5>
-                            </div>
-                            <ul className="list-group list-group-flush"></ul>
-                            <button
-                                href=""
-                                onClick={() => {                                                      
-                                    resetCart("Pencils");
-                                    resetCart("Pens");
-                                    resetCart("Notebook");
-                                    resetCart("Scissors");
-                                    resetCart("Folders");
-                                    resetCart("Calculator");
-                                    resetCart("Pencil Sharpener");
-                                    resetCart("Backpack");
-                                    changePage("Browse");
-                                }}
-                                className="btn btn-secondary"
-                            >
-                                {" "}
-                                <i className="bi-arrow-left-circle"></i>
-                                Return
-                            </button>
-                        </div>
                     </div>
                     <div className="col-2"></div>
                 </div>
