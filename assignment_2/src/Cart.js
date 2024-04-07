@@ -21,54 +21,34 @@ function validate(order) {
     const summaryCard = document.querySelector(".card");
     const summaryList = document.querySelector(".card > ul");
 
-    if ( !email.value.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ )) {
-        email.setAttribute("class", "form-control is-invalid");
-        val = false;
-    } 
-    else {
-        email.setAttribute("class", "form-control is-valid");
+    function validateElement(condition, element, ) {
+        if (condition) {
+            element.setAttribute("class", "form-control is-invalid");
+            val = false;
+            return false;
+        } 
+        else {
+            element.setAttribute("class", "form-control is-valid");
+            return true;
+        }
+    }
+
+    if (validateElement(!email.value.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ), email)) {
         order.email = email.value;
     }
 
-    if (!zip.value.match( /^[0-9]{5}(?:-[0-9]{4})?$/)) {
-        zip.setAttribute("class", "form-control is-invalid");
-        val = false;
-    } 
-    else {
-        zip.setAttribute("class", "form-control is-valid");
-    }
+    validateElement(!zip.value.match( /^[0-9]{5}(?:-[0-9]{4})?$/), zip);
+    validateElement(state.value === "Choose", state);
 
-    if (state.value === "Choose") {
-        state.setAttribute("class", "form-control is-invalid");
-        val = false;
-    } 
-    else {
-        state.setAttribute("class", "form-control is-valid");
-    }
-
-    if (address.value.length === 0) {
-        address.setAttribute("class", "form-control is-invalid");
-        val = false;
-    } 
-    else {
-        address.setAttribute("class", "form-control is-valid");
+    if (validateElement(address.value.length === 0, address)) {
         order.address = address.value;
     }
-    if (name.value.length === 0) {
-        name.setAttribute("class", "form-control is-invalid");
-        val = false;
-    } 
-    else {
-        name.setAttribute("class", "form-control is-valid");
+
+    if (validateElement(name.value.length === 0, name)) {
         order.name = name.value;
     }
 
-    if (!card.value.match(/^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/)) {
-        card.setAttribute("class", "form-control is-invalid");
-        val = false;
-    } 
-    else {
-        card.setAttribute("class", "form-control is-valid");
+    if (validateElement(!card.value.match(/^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/), card)) {
         order.card = card.value;
     }
 
