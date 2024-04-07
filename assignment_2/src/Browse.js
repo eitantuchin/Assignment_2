@@ -63,6 +63,7 @@ export function Browse({
                   src={product.image}
                   alt={product.name}
                   className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                  id="product-img"
                 />
               </div>
               <div className="mt-4 flex justify-between">
