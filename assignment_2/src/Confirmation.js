@@ -1,17 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 export function Confirmation({ isActive, changePage, cart, productPrices, resetCart, order }) {
-    const [summaryItems, setSummaryItems] = useState([]);
-    
-    useEffect(() => {
-        setSummaryItems(Object.entries(order).map(
-          ([key, value]) => (
-            <li key={key} className="list-group-item">
-              <b>{key}:</b> {key === "card" ? "****-****-****-" + value.slice(-4) : value}
-            </li>
-          )
-        ));
-      }, [order]);
 
     if (isActive) {
         return (
@@ -36,11 +25,68 @@ export function Confirmation({ isActive, changePage, cart, productPrices, resetC
                     <div className="container mx-auto mt-20">
                         <div className="card" style={{ width: "100%; padding: 20px;" }}>
                             <div className="card-body">
-                                <h5 className="card-title">Order Confirmation</h5>
+                                <h1 className="card-title text-4xl" >Order Confirmation</h1>
+                                <h2 className="mt-4 text-xl">Customer Details</h2>
+
+                                <ul className="list-group list-group-flush">
+                                    {Object.entries(order).map(
+                                        ([key, value]) => (
+                                            <li key={key} className="list-group-item">
+                                            <b>{key}:</b> {key === "card" ? "****-****-****-" + value.slice(-4) : value}
+                                            </li>
+                                        )
+                                    )}
+                                </ul>
+
+                                <h2 className="mt-4 text-xl">Order Items</h2>
+                                <ul className ="list-group list-group-flush">
+                                    {Object.keys(cart).map((key) =>
+                                        cart[key] > 0 ? (
+                                            <li key={key} className="list-group-item">
+                                                <b>{key}:</b> {cart[key]} x ${productPrices[key].toFixed(2)}
+                                            </li>
+                                        ) : null
+                                    )}
+
+                                    <li className="list-group-item">
+                                        <b>Total without Tax: </b>
+                                        {Object.keys(cart)
+                                            .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
+                                            .reduce(
+                                                (total, price, index) =>
+                                                    total + price * cart[Object.keys(cart)[index]],
+                                                0
+                                            )
+                                            .toFixed(2)}
+                                    </li>
+
+                                    <li className="list-group-item">
+                                        <b>Tax: </b>
+                                        {Object.keys(cart)
+                                            .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
+                                            .reduce(
+                                                (total, price, index) =>
+                                                    total + 0.06 * price * cart[Object.keys(cart)[index]],
+                                                0
+                                            )
+                                            .toFixed(2)}
+                                    </li>
+
+                                    <li className="list-group-item">
+                                        <b>Total with Tax:</b> $
+                                        {Object.keys(cart)
+                                            .map((key) => (cart[key] > 0 ? productPrices[key] : 0))
+                                            .reduce(
+                                                (total, price, index) =>
+                                                    total +
+                                                    price * cart[Object.keys(cart)[index]] +
+                                                    0.07 * price * cart[Object.keys(cart)[index]],
+                                                0
+                                            )
+                                            .toFixed(2)}
+                                    </li>
+                                </ul>
                             </div>
-                            <ul className="list-group list-group-flush">
-                                {summaryItems}
-                            </ul>
                             <button
                                 href=""
                                 onClick={() => {                                                      
